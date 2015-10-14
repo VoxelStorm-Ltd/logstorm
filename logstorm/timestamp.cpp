@@ -7,7 +7,7 @@ timestamp::timestamp(types this_type)
   /// Default constructor
 }
 
-timestamp::~timestamp() {
+timestamp::~timestamp() const {
   /// Default destructor
 }
 
