@@ -13,8 +13,8 @@ public:
   dummy(timestamp::types timestamp_type = timestamp::types::NONE);
   virtual ~dummy();
 
-  virtual void log(std::string const &log_entry) override final;
-  virtual void log_fragment(std::string const &log_entry) override final;
+  virtual void log(std::string const &log_entry) override final __attribute__((__const__));
+  virtual void log_fragment(std::string const &log_entry) override final __attribute__((__const__));
 };
 
 }

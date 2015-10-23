@@ -66,7 +66,7 @@ public:
   }
 
   timestamp(types this_type = types::NONE);
-  ~timestamp() const;
+  ~timestamp() __attribute__((__const__));
 };
 
 }
