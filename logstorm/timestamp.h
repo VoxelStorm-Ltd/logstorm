@@ -17,8 +17,7 @@ public:
     DATE_TIME,
     UNIX,
     SINCE_START
-  };
-  types type;
+  } type = types::DEFAULT;
 
   std::string operator()() {
     /// Generate a timestamp as appropriate to this timestamp's type
