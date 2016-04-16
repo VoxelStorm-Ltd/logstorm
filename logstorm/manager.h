@@ -17,14 +17,14 @@ class manager {
   /// multiple independent sinks in either line-by-line or stream format.
   ///
   /// Usage:
-  ///   logstorm::manager log;
-  ///   log.add_sink(new logstorm::sink::console);
-  ///   log.add_sink(new logstorm::sink::file("myfile.log", logstorm::timestamp::types::SINCE_START)));
+  ///   logstorm::manager logger;
+  ///   logger.add_sink(new logstorm::sink::console);
+  ///   logger.add_sink(new logstorm::sink::file("myfile.log", logstorm::timestamp::types::SINCE_START)));
   ///   // different ways to log:
-  ///   log.log("hello world");
-  ///   log("hello world");
-  ///   log("hello ", "world ", 1234);
-  ///   log() << "Hello world! " << 1234;   // note: newline is added automagically
+  ///   logger.log("hello world");
+  ///   logger("hello world");
+  ///   logger("hello ", "world ", 1234);
+  ///   logger() << "Hello world! " << 1234;   // note: newline is added automagically
 private:
   std::vector<sink::base*> sinks;                                               // the output sinks we're logging to
 
