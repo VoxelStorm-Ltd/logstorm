@@ -64,7 +64,7 @@ public:
     }
   }
 
-  timestamp(types this_type = types::NONE);
+  explicit timestamp(types this_type = types::NONE);
   ~timestamp() __attribute__((__const__));
 };
 

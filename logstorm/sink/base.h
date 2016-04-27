@@ -12,7 +12,7 @@ protected:
   timestamp time;
 
 protected:
-  base(timestamp::types timestamp_type = timestamp::types::NONE);
+  explicit base(timestamp::types timestamp_type = timestamp::types::NONE);
 public:
   virtual ~base();
 

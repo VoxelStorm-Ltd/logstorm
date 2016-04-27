@@ -9,7 +9,7 @@ namespace sink {
 
 class console : public base {
 public:
-  console(timestamp::types timestamp_type = timestamp::types::NONE);
+  explicit console(timestamp::types timestamp_type = timestamp::types::NONE);
   virtual ~console();
 
   virtual void log(std::string const &log_entry) override final;

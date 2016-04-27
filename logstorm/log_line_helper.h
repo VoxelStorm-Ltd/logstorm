@@ -17,7 +17,7 @@ private:
   std::stringstream aggregator;
 
 public:
-  log_line_helper(std::vector<sink::base*> &sinks_to_use);
+  explicit log_line_helper(std::vector<sink::base*> &sinks_to_use);
   ~log_line_helper();
 
   log_line_helper(log_line_helper const &other);

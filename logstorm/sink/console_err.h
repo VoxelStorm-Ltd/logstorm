@@ -9,7 +9,7 @@ namespace sink {
 
 class console_err : public base {
 public:
-  console_err(timestamp::types timestamp_type = timestamp::types::NONE);
+  explicit console_err(timestamp::types timestamp_type = timestamp::types::NONE);
   virtual ~console_err();
 
   virtual void log(std::string const &log_entry) override final;
