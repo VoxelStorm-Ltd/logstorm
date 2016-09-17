@@ -23,4 +23,3 @@ void console_err::log_fragment(std::string const &log_entry) {
 }
 
 }
-}

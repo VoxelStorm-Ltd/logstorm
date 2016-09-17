@@ -51,23 +51,3 @@ public:
     using unpack = int[];
     unpack{0, (helper << entries, 0)...};
   }
-
-  /*
-  template<typename T> manager &operator<<(T const &rhs) {
-    /// Convenience function just to generate a nice error if the << operator is called without () by mistake
-    // dirty hack: artificial static assert test that always fails but depends on instantiation (see http://stackoverflow.com/a/16101862/1678468)
-    static_assert(sizeof(T) != sizeof(T), "Use operator(), i.e. mylog() << \"my message\";");
-    return *this;
-  }
-  */
-  template<typename T> log_line_helper operator<<(T const &rhs) {
-    /// Produce a log line helper and return it for further streaming
-    log_line_helper helper(sinks);
-    helper << rhs;
-    return helper;
-  }
-};
-
-}
-
-#endif // LOGSTORM_MANAGER_H_INCLUDED
