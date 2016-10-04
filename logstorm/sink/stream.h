@@ -14,7 +14,7 @@ private:
 
 public:
   stream(std::ostream &target_ostream, timestamp::types timestamp_type = timestamp::types::NONE);
-  virtual ~stream();
+  virtual ~stream() __attribute__((__const__));
 
   virtual void log(std::string const &log_entry) override final;
   virtual void log_fragment(std::string const &log_entry) override final;

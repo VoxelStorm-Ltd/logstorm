@@ -14,7 +14,7 @@ protected:
 protected:
   explicit base(timestamp::types timestamp_type = timestamp::types::NONE);
 public:
-  virtual ~base();
+  virtual ~base() __attribute__((__const__));
 
   virtual void log(std::string const &log_entry) = 0;
   virtual void log_fragment(std::string const &log_entry) = 0;
