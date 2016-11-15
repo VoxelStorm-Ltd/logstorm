@@ -2,12 +2,19 @@
 #define LOGSTORM_SINK_CONSOLE_ERR_H_INCLUDED
 
 #include "base.h"
+#ifndef LOGSTORM_SINGLE_THREADED
+  #include <mutex>
+#endif // LOGSTORM_SINGLE_THREADED
 #include "logstorm/timestamp.h"
 
 namespace logstorm {
 namespace sink {
 
 class console_err : public base {
+  #ifndef LOGSTORM_SINGLE_THREADED
+    std::mutex output_mutex;
+  #endif // LOGSTORM_SINGLE_THREADED
+
 public:
   explicit console_err(timestamp::types timestamp_type = timestamp::types::NONE);
   virtual ~console_err() __attribute__((__const__));

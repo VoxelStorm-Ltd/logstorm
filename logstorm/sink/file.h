@@ -3,14 +3,19 @@
 
 #include "base.h"
 #include <fstream>
+#ifndef LOGSTORM_SINGLE_THREADED
+  #include <mutex>
+#endif // LOGSTORM_SINGLE_THREADED
 #include "logstorm/timestamp.h"
 
 namespace logstorm {
 namespace sink {
 
 class file : public base {
-private:
   std::ofstream stream;
+  #ifndef LOGSTORM_SINGLE_THREADED
+    std::mutex output_mutex;
+  #endif // LOGSTORM_SINGLE_THREADED
 
 public:
   file(std::string const &target_filename, timestamp::types timestamp_type = timestamp::types::DATE_TIME);
