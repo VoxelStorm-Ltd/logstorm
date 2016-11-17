@@ -22,12 +22,15 @@ public:
 
   log_line_helper(log_line_helper const &other);
 
-  template<typename T> log_line_helper &operator<<(T const &rhs) {
-    /// Input operator forwarding to all sinks in string format
-    aggregator << rhs;
-    return *this;
-  }
+  template<typename T> inline constexpr log_line_helper &operator<<(T const &rhs);
 };
+
+template<typename T>
+inline constexpr log_line_helper &log_line_helper::operator<<(T const &rhs) {
+  /// Input operator forwarding to all sinks in string format
+  aggregator << rhs;
+  return *this;
+}
 
 }
 

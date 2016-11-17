@@ -39,12 +39,12 @@ public:
     /// Generate log line helper as a temporary recipient to stream to
     return log_line_helper(sinks);
   }
-  template <typename T> void operator()(T entry) {
+  template <typename T> inline constexpr void operator()(T entry) {
     /// Convenience function to log a single entry
     log_line_helper helper(sinks);
     helper << entry;
   }
-  template <typename... Args> void operator()(Args&&... entries) {
+  template <typename... Args> inline constexpr void operator()(Args&&... entries) {
     /// Convenience function to log any number of arguments
     log_line_helper helper(sinks);
     // now this is a hack... this is the hack of hacks.
@@ -53,14 +53,14 @@ public:
   }
 
   /*
-  template<typename T> manager &operator<<(T const &rhs) {
+  template<typename T> inline constexpr manager &operator<<(T const &rhs) {
     /// Convenience function just to generate a nice error if the << operator is called without () by mistake
     // dirty hack: artificial static assert test that always fails but depends on instantiation (see http://stackoverflow.com/a/16101862/1678468)
     static_assert(sizeof(T) != sizeof(T), "Use operator(), i.e. mylog() << \"my message\";");
     return *this;
   }
   */
-  template<typename T> log_line_helper operator<<(T const &rhs) {
+  template<typename T> inline constexpr log_line_helper operator<<(T const &rhs) {
     /// Produce a log line helper and return it for further streaming
     log_line_helper helper(sinks);
     helper << rhs;
