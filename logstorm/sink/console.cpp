@@ -26,11 +26,11 @@ void console::log_fragment(std::string const &log_entry) {
     std::lock_guard<std::mutex> lock(output_mutex);
   #endif // LOGSTORM_SINGLE_THREADED
   #ifdef LOGSTORM_COMPOSE_FRAGMENTS_SEPARATELY
-    if(line_in_progress.empty()) {                                                // if this is the start of a line, add a timestamp and cache it
+    if(line_in_progress.empty()) {                                              // if this is the start of a line, add a timestamp and cache it
       line_in_progress = time();
     }
     line_in_progress += log_entry;
-    if(log_entry.back() == std::endl) {                                           // if this is a newline, push it to the buffer
+    if(log_entry.back() == std::endl) {                                         // if this is a newline, push it to the buffer
       std::cout << line_in_progress;
       line_in_progress.clear();
     }
