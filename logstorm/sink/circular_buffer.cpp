@@ -1,29 +1,30 @@
-#include "stream.h"
+#include "circular_buffer.h"
 
 namespace logstorm {
 namespace sink {
 
-stream::stream(std::ostream &target_ostream, timestamp::types timestamp_type)
+circular_buffer::circular_buffer(unsigned int this_size, timestamp::types timestamp_type)
   : base(timestamp_type),
-    ostream(target_ostream) {
+    size(this_size),
+    data(size) {
   /// Default constructor
 }
 
-stream::~stream() {
+circular_buffer::~circular_buffer() {
   /// Default destructor
 }
 
-void stream::log(std::string const &log_entry) {
+void circular_buffer::log(std::string const &log_entry) {
   /// Log this line
   #ifndef LOGSTORM_SINGLE_THREADED
-    std::lock_guard<std::mutex> lock(output_mutex);
+    std::unique_lock<std::shared_mutex> lock(data_mutex);                       // lock for writing (unique)
   #endif // LOGSTORM_SINGLE_THREADED
-  ostream << time() << log_entry << std::endl;
+  data.push_back(time() + log_entry);
 }
-void stream::log_fragment(std::string const &log_entry) {
+void circular_buffer::log_fragment(std::string const &log_entry) {
   /// Log this fragment without ending the line
   #ifndef LOGSTORM_SINGLE_THREADED
-    std::lock_guard<std::mutex> lock(output_mutex);
+    std::unique_lock<std::shared_mutex> lock(data_mutex);                       // lock for writing (unique)
   #endif // LOGSTORM_SINGLE_THREADED
   #ifdef LOGSTORM_COMPOSE_FRAGMENTS_SEPARATELY
     if(line_in_progress.empty()) {                                                // if this is the start of a line, add a timestamp and cache it
@@ -31,13 +32,11 @@ void stream::log_fragment(std::string const &log_entry) {
     }
     line_in_progress += log_entry;
     if(log_entry.back() == std::endl) {                                           // if this is a newline, push it to the buffer
-      if(stream.good()) {
-        ostream << line_in_progress;
-      }
+      data.push_back(line_in_progress);
       line_in_progress.clear();
     }
   #else
-    ostream << log_entry;
+    data.back() += log_entry;
   #endif // LOGSTORM_COMPOSE_FRAGMENTS_SEPARATELY
 }
 
