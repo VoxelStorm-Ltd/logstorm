@@ -1,9 +1,9 @@
 #ifndef LOGSTORM_LOG_LINE_HELPER_H_INCLUDED
 #define LOGSTORM_LOG_LINE_HELPER_H_INCLUDED
 
+#include <memory>
 #include <vector>
 #include <sstream>
-#include <iostream>
 
 namespace logstorm {
 
@@ -13,11 +13,11 @@ class base;
 
 class log_line_helper {
 private:
-  std::vector<sink::base*> &sinks;
+  std::vector<std::shared_ptr<sink::base>> &sinks;
   std::stringstream aggregator;
 
 public:
-  explicit log_line_helper(std::vector<sink::base*> &sinks_to_use);
+  explicit log_line_helper(std::vector<std::shared_ptr<sink::base>> &sinks_to_use);
   ~log_line_helper();
 
   log_line_helper(log_line_helper const &other);

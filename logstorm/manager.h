@@ -1,9 +1,8 @@
 #ifndef LOGSTORM_MANAGER_H_INCLUDED
 #define LOGSTORM_MANAGER_H_INCLUDED
 
-#include <vector>
-#include <string>
-
+#include <memory>
+#include <type_traits>
 #include "log_line_helper.h"
 
 namespace logstorm {
@@ -26,47 +25,76 @@ class manager {
   ///   logger("hello ", "world ", 1234);
   ///   logger << "Hello world! " << 1234;   // note: newline is added automagically
 private:
-  std::vector<sink::base*> sinks;                                               // the output sinks we're logging to
+  std::vector<std::shared_ptr<sink::base>> sinks;                               // the output sinks we're logging to
 
 public:
   manager();
   ~manager();
 
-  void add_sink(sink::base *newsink);
+  template<typename T, class... Args, typename = std::enable_if_t<std::is_base_of<sink::base, T>::value>>
+  unsigned int add_sink(Args&&... args);
+  [[deprecated("Prefer add_sink<type>(args) or add_sink(std::make_shared<type>(args))")]]
+  unsigned int add_sink(sink::base* newsink);
+  unsigned int add_sink(std::shared_ptr<sink::base> newsink);
+
+  std::shared_ptr<sink::base> get_sink(unsigned int sink_id);
+
+  void remove_sink(unsigned int sink_id);
+
+  void clear_sinks();
+
   void log(std::string const &log_entry);
 
-  log_line_helper operator()() __attribute__((__deprecated__("Using () is not required in combination with the stream operator."))) {
+  [[deprecated("Using () is not required in combination with the stream operator.")]]
+  log_line_helper operator()() {
     /// Generate log line helper as a temporary recipient to stream to
     return log_line_helper(sinks);
   }
-  template <typename T> inline constexpr void operator()(T entry) {
-    /// Convenience function to log a single entry
-    log_line_helper helper(sinks);
-    helper << entry;
-  }
-  template <typename... Args> inline constexpr void operator()(Args&&... entries) {
-    /// Convenience function to log any number of arguments
-    log_line_helper helper(sinks);
-    // now this is a hack... this is the hack of hacks.
-    using unpack = int[];
-    unpack{0, (helper << entries, 0)...};
-  }
+  template <typename T> inline constexpr void operator()(T entry);
+  template <typename... Args> inline constexpr void operator()(Args&&... entries);
 
   /*
-  template<typename T> inline constexpr manager &operator<<(T const &rhs) {
-    /// Convenience function just to generate a nice error if the << operator is called without () by mistake
-    // dirty hack: artificial static assert test that always fails but depends on instantiation (see http://stackoverflow.com/a/16101862/1678468)
-    static_assert(sizeof(T) != sizeof(T), "Use operator(), i.e. mylog() << \"my message\";");
-    return *this;
-  }
+  template<typename T> inline constexpr manager &operator<<(T const &rhs);
   */
-  template<typename T> inline constexpr log_line_helper operator<<(T const &rhs) {
-    /// Produce a log line helper and return it for further streaming
-    log_line_helper helper(sinks);
-    helper << rhs;
-    return helper;
-  }
+  template<typename T> inline constexpr log_line_helper operator<<(T const &rhs);
 };
+
+template<typename T, class... Args, typename = std::enable_if_t<std::is_base_of<sink::base, T>::value>>
+unsigned int manager::add_sink(Args&&... args) {
+  return add_sink(std::make_shared<T>(args...));
+}
+
+template <typename T>
+inline constexpr void manager::operator()(T entry) {
+  /// Convenience function to log a single entry
+  log_line_helper helper(sinks);
+  helper << entry;
+}
+template <typename... Args>
+inline constexpr void manager::operator()(Args&&... entries) {
+  /// Convenience function to log any number of arguments
+  log_line_helper helper(sinks);
+  // now this is a hack... this is the hack of hacks.
+  using unpack = int[];
+  unpack{0, (helper << entries, 0)...};
+}
+
+/*
+template<typename T>
+inline constexpr manager &operator<<(T const &rhs) {
+  /// Convenience function just to generate a nice error if the << operator is called without () by mistake
+  // dirty hack: artificial static assert test that always fails but depends on instantiation (see http://stackoverflow.com/a/16101862/1678468)
+  static_assert(sizeof(T) != sizeof(T), "Use operator(), i.e. mylog() << \"my message\";");
+  return *this;
+}
+*/
+template<typename T>
+inline constexpr log_line_helper manager::operator<<(T const &rhs) {
+  /// Produce a log line helper and return it for further streaming
+  log_line_helper helper(sinks);
+  helper << rhs;
+  return helper;
+}
 
 }
 

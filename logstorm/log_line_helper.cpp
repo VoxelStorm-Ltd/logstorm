@@ -1,9 +1,10 @@
 #include "log_line_helper.h"
+#include <iostream>
 #include "sink/base.h"
 
 namespace logstorm {
 
-log_line_helper::log_line_helper(std::vector<sink::base*> &sinks_to_use)
+log_line_helper::log_line_helper(std::vector<std::shared_ptr<sink::base>> &sinks_to_use)
   : sinks(sinks_to_use) {
   /// Default constructor
 }
