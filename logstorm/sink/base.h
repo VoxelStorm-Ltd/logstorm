@@ -4,8 +4,7 @@
 #include <string>
 #include "logstorm/timestamp.h"
 
-namespace logstorm {
-namespace sink {
+namespace logstorm::sink {
 
 class base {
   #ifdef LOGSTORM_COMPOSE_FRAGMENTS_SEPARATELY
@@ -24,7 +23,6 @@ public:
   virtual void log_fragment(std::string const &log_entry) = 0;
 };
 
-}
 }
 
 #endif // LOGSTORM_SINK_BASE_H_INCLUDED

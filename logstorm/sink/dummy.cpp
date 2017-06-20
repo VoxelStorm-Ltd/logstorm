@@ -1,7 +1,6 @@
 #include "dummy.h"
 
-namespace logstorm {
-namespace sink {
+namespace logstorm::sink {
 
 dummy::dummy(timestamp::types timestamp_type)
   : base(timestamp_type) {
@@ -19,5 +18,4 @@ void dummy::log_fragment(std::string const &log_entry __attribute__((__unused__)
   /// Dummy function to not do anything (for use in a non-logging environment)
 }
 
-}
 }

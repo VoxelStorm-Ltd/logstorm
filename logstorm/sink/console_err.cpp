@@ -1,8 +1,7 @@
 #include "console_err.h"
 #include <iostream>
 
-namespace logstorm {
-namespace sink {
+namespace logstorm::sink {
 
 console_err::console_err(timestamp::types timestamp_type)
   : base(timestamp_type) {
@@ -39,5 +38,4 @@ void console_err::log_fragment(std::string const &log_entry) {
   #endif // LOGSTORM_COMPOSE_FRAGMENTS_SEPARATELY
 }
 
-}
 }

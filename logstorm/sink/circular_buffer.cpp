@@ -1,7 +1,6 @@
 #include "circular_buffer.h"
 
-namespace logstorm {
-namespace sink {
+namespace logstorm::sink {
 
 circular_buffer::circular_buffer(unsigned int this_size, timestamp::types timestamp_type)
   : base(timestamp_type),
@@ -40,5 +39,4 @@ void circular_buffer::log_fragment(std::string const &log_entry) {
   #endif // LOGSTORM_COMPOSE_FRAGMENTS_SEPARATELY
 }
 
-}
 }

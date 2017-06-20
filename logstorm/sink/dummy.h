@@ -4,8 +4,7 @@
 #include "base.h"
 #include "logstorm/timestamp.h"
 
-namespace logstorm {
-namespace sink {
+namespace logstorm::sink {
 
 class dummy : public base {
   /// Dummy logging class to not do anything (for use in a non-logging environment)
@@ -17,7 +16,6 @@ public:
   virtual void log_fragment(std::string const &log_entry) override final __attribute__((__const__));
 };
 
-}
 }
 
 #endif // LOGSTORM_SINK_DUMMY_H_INCLUDED

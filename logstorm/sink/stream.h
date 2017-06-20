@@ -8,8 +8,7 @@
 #endif // LOGSTORM_SINGLE_THREADED
 #include "logstorm/timestamp.h"
 
-namespace logstorm {
-namespace sink {
+namespace logstorm::sink {
 
 class stream : public base {
   std::ostream &ostream;
@@ -25,7 +24,6 @@ public:
   virtual void log_fragment(std::string const &log_entry) override final;
 };
 
-}
 }
 
 #endif // LOGSTORM_SINK_STREAM_H_INCLUDED

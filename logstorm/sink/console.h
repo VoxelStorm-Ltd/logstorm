@@ -7,8 +7,7 @@
 #endif // LOGSTORM_SINGLE_THREADED
 #include "logstorm/timestamp.h"
 
-namespace logstorm {
-namespace sink {
+namespace logstorm::sink {
 
 class console : public base {
   #ifndef LOGSTORM_SINGLE_THREADED
@@ -23,7 +22,6 @@ public:
   virtual void log_fragment(std::string const &log_entry) override final;
 };
 
-}
 }
 
 #endif // LOGSTORM_SINK_CONSOLE_H_INCLUDED

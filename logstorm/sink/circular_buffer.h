@@ -7,8 +7,7 @@
 #endif // GUISTORM_SINGLETHREADED
 #include <boost/circular_buffer.hpp>
 
-namespace logstorm {
-namespace sink {
+namespace logstorm::sink {
 
 class circular_buffer : public base {
   /// A sink that stores strings in a circular buffer up to a fixed number of lines
@@ -26,7 +25,6 @@ public:
   virtual void log_fragment(std::string const &log_entry) override final;
 };
 
-}
 }
 
 #endif // CIRCULAR_BUFFER_H_INCLUDED

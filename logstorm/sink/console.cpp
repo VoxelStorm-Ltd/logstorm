@@ -1,8 +1,7 @@
 #include "console.h"
 #include <iostream>
 
-namespace logstorm {
-namespace sink {
+namespace logstorm::sink {
 
 console::console(timestamp::types timestamp_type)
   : base(timestamp_type) {
@@ -39,5 +38,4 @@ void console::log_fragment(std::string const &log_entry) {
   #endif // LOGSTORM_COMPOSE_FRAGMENTS_SEPARATELY
 }
 
-}
 }

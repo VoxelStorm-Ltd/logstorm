@@ -1,7 +1,6 @@
 #include "stream.h"
 
-namespace logstorm {
-namespace sink {
+namespace logstorm::sink {
 
 stream::stream(std::ostream &target_ostream, timestamp::types timestamp_type)
   : base(timestamp_type),
@@ -41,5 +40,4 @@ void stream::log_fragment(std::string const &log_entry) {
   #endif // LOGSTORM_COMPOSE_FRAGMENTS_SEPARATELY
 }
 
-}
 }

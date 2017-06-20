@@ -1,8 +1,7 @@
 #include "file.h"
 #include <iostream>
 
-namespace logstorm {
-namespace sink {
+namespace logstorm::sink {
 
 file::file(std::string const &target_filename, timestamp::types timestamp_type)
   : base(timestamp_type),
@@ -53,5 +52,4 @@ void file::log_fragment(std::string const &log_entry) {
   #endif // LOGSTORM_COMPOSE_FRAGMENTS_SEPARATELY
 }
 
-}
 }
