@@ -11,10 +11,10 @@ dummy::~dummy() {
   /// Default destructor
 }
 
-void dummy::log(std::string const &log_entry __attribute__((__unused__))) {
+void dummy::log(std::string const &log_entry [[maybe_unused]]) {
   /// Dummy function to not do anything (for use in a non-logging environment)
 }
-void dummy::log_fragment(std::string const &log_entry __attribute__((__unused__))) {
+void dummy::log_fragment(std::string const &log_entry [[maybe_unused]]) {
   /// Dummy function to not do anything (for use in a non-logging environment)
 }
 
