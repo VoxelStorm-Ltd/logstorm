@@ -15,14 +15,14 @@ stream::~stream() {
 void stream::log(std::string const &log_entry) {
   /// Log this line
   #ifndef LOGSTORM_SINGLE_THREADED
-    std::lock_guard<std::mutex> lock(output_mutex);
+    std::lock_guard lock(output_mutex);
   #endif // LOGSTORM_SINGLE_THREADED
   ostream << time() << log_entry << std::endl;
 }
 void stream::log_fragment(std::string const &log_entry) {
   /// Log this fragment without ending the line
   #ifndef LOGSTORM_SINGLE_THREADED
-    std::lock_guard<std::mutex> lock(output_mutex);
+    std::lock_guard lock(output_mutex);
   #endif // LOGSTORM_SINGLE_THREADED
   #ifdef LOGSTORM_COMPOSE_FRAGMENTS_SEPARATELY
     if(line_in_progress.empty()) {                                              // if this is the start of a line, add a timestamp and cache it
