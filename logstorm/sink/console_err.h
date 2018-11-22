@@ -16,7 +16,7 @@ class console_err : public base {
 
 public:
   explicit console_err(timestamp::types timestamp_type = timestamp::types::NONE);
-  virtual ~console_err() __attribute__((__const__));
+  virtual ~console_err();
 
   virtual void log(std::string const &log_entry) override final;
   virtual void log_fragment(std::string const &log_entry) override final;
