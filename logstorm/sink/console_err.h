@@ -9,14 +9,14 @@
 
 namespace logstorm::sink {
 
-class console_err : public base {
+class console_err final : public base {
   #ifndef LOGSTORM_SINGLE_THREADED
     std::mutex output_mutex;
   #endif // LOGSTORM_SINGLE_THREADED
 
 public:
   explicit console_err(timestamp::types timestamp_type = timestamp::types::NONE);
-  virtual ~console_err();
+  virtual ~console_err() override final;
 
   virtual void log(std::string const &log_entry) override final;
   virtual void log_fragment(std::string const &log_entry) override final;

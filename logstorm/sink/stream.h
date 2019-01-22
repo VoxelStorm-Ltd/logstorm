@@ -10,7 +10,7 @@
 
 namespace logstorm::sink {
 
-class stream : public base {
+class stream final : public base {
   std::ostream &ostream;
   #ifndef LOGSTORM_SINGLE_THREADED
     std::mutex output_mutex;
@@ -18,7 +18,7 @@ class stream : public base {
 
 public:
   stream(std::ostream &target_ostream, timestamp::types timestamp_type = timestamp::types::NONE);
-  virtual ~stream();
+  virtual ~stream() override final;
 
   virtual void log(std::string const &log_entry) override final;
   virtual void log_fragment(std::string const &log_entry) override final;
