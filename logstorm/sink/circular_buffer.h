@@ -9,7 +9,7 @@
 
 namespace logstorm::sink {
 
-class circular_buffer final : public base {
+class circular_buffer : public base {
   /// A sink that stores strings in a circular buffer up to a fixed number of lines
 public:
   unsigned int const size = 256;
@@ -19,7 +19,7 @@ public:
   #endif // GUISTORM_SINGLETHREADED
 
   circular_buffer(unsigned int max_lines, timestamp::types timestamp_type = timestamp::types::NONE);
-  ~circular_buffer() override final;
+  ~circular_buffer();
 
   virtual void log(std::string const &log_entry) override final;
   virtual void log_fragment(std::string const &log_entry) override final;

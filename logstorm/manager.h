@@ -59,7 +59,7 @@ public:
   template<typename T> inline constexpr log_line_helper operator<<(T const &rhs);
 };
 
-template<typename T, class... Args, typename = std::enable_if_t<std::is_base_of<sink::base, T>::value>>
+template<typename T, class... Args, typename>
 unsigned int manager::add_sink(Args&&... args) {
   return add_sink(std::make_shared<T>(args...));
 }

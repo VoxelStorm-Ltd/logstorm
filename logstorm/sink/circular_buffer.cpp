@@ -1,4 +1,7 @@
 #include "circular_buffer.h"
+#ifndef LOGSTORM_SINGLE_THREADED
+  #include <mutex>
+#endif // LOGSTORM_SINGLE_THREADED
 
 namespace logstorm::sink {
 
