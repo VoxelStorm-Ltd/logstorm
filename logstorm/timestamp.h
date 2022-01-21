@@ -11,20 +11,19 @@ class timestamp {
   std::chrono::time_point<std::chrono::system_clock> time_start = std::chrono::system_clock::now();
 public:
   enum class types {
-    DEFAULT,
     NONE,
     TIME,
     DATE,
     DATE_TIME,
     UNIX,
-    SINCE_START
+    SINCE_START,
+    DEFAULT = NONE
   } type = types::DEFAULT;
 
   std::string operator()() {
     /// Generate a timestamp as appropriate to this timestamp's type
     switch(type) {
     default:
-    case types::DEFAULT:
     case types::NONE:
       return "";
     case types::TIME:
