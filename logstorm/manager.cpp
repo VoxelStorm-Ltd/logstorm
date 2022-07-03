@@ -34,7 +34,7 @@ void manager::remove_sink(unsigned int sink_id) {
   if(sink_id >= sinks.size()) {
     return;
   }
-  sinks.erase(sinks.begin() + sink_id);
+  sinks.erase(sinks.begin() + static_cast<ptrdiff_t>(sink_id));
 }
 
 void manager::clear_sinks() {
