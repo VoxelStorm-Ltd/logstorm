@@ -4,14 +4,6 @@
 
 namespace logstorm {
 
-manager::manager() {
-  /// Default constructor
-}
-
-manager::~manager() {
-  /// Default destructor
-}
-
 unsigned int manager::add_sink(std::shared_ptr<sink::base> newsink) {
   /// Add a logging sink, and return its id for later reference
   sinks.emplace_back(newsink);

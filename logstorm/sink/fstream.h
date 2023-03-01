@@ -18,7 +18,7 @@ class fstream : public base {
 
 public:
   fstream(std::ofstream &target_stream, timestamp::types timestamp_type = timestamp::types::DATE_TIME);
-  virtual ~fstream();
+  virtual ~fstream() override;
 
   virtual void log(std::string const &log_entry) override final;
   virtual void log_fragment(std::string const &log_entry) override final;

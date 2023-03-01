@@ -16,7 +16,7 @@ class console : public base {
 
 public:
   explicit console(timestamp::types timestamp_type = timestamp::types::NONE);
-  virtual ~console();
+  virtual ~console() override;
 
   virtual void log(std::string const &log_entry) override final;
   virtual void log_fragment(std::string const &log_entry) override final;

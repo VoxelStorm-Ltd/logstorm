@@ -18,7 +18,7 @@ class file : public base {
 
 public:
   file(std::string const &target_filename, timestamp::types timestamp_type = timestamp::types::DATE_TIME);
-  virtual ~file();
+  virtual ~file() override;
 
   virtual void log(std::string const &log_entry) override final;
   virtual void log_fragment(std::string const &log_entry) override final;

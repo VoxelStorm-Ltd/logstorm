@@ -34,9 +34,6 @@ private:
   std::vector<std::shared_ptr<sink::base>> sinks;                               // the output sinks we're logging to
 
 public:
-  manager();
-  ~manager();
-
   template<typename T, class... Args, typename = std::enable_if_t<std::is_base_of<sink::base, T>::value>>
   unsigned int add_sink(Args&&... args);
   [[deprecated("Prefer add_sink<type>(args) or add_sink(std::make_shared<type>(args))")]]

@@ -23,7 +23,6 @@ public:
   std::string operator()() {
     /// Generate a timestamp as appropriate to this timestamp's type
     switch(type) {
-    default:
     case types::NONE:
       return "";
     case types::TIME:
