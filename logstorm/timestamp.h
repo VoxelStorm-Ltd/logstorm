@@ -61,6 +61,7 @@ public:
         return ss.str();
       }
     }
+    return {};                                                                  // not actually reachable
   }
 
   explicit timestamp(types this_type = types::NONE);
