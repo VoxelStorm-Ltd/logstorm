@@ -26,5 +26,5 @@ The default behaviour is to append the appropriate end and flush fragment for ea
 ## Configuration
 
 The following compile-time switches are available - define:
-- LOGSTORM_SINGLE_THREADED - Don't use synchronisation to protect sinks.
-- LOGSTORM_COMPOSE_FRAGMENTS_SEPARATELY - Don't append fragments with `log_fragment()` to the current line, but store them until they receive a `std::endl()` and then send the line as a whole.
+- `LOGSTORM_SINGLE_THREADED` - Don't use synchronisation to protect sinks.
+- `LOGSTORM_COMPOSE_FRAGMENTS_SEPARATELY` - Don't append fragments with `log_fragment()` to the current line, but store them until they receive a `std::endl()` and then send the line as a whole.
