@@ -1,4 +1,4 @@
-# logstorm
+# LogStorm
 C++ logging library by VoxelStorm.
 
 A simple templated multi-sink logger with optional thread safety.  Designed to make it easy and compact to log text to console and file, and to easily be extensible to receive other sources.
