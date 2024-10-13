@@ -23,8 +23,8 @@ class manager {
   ///
   /// Usage:
   ///   logstorm::manager logger;
-  ///   logger.add_sink(new logstorm::sink::console);
-  ///   logger.add_sink(new logstorm::sink::file("myfile.log", logstorm::timestamp::types::SINCE_START)));
+  ///   logger.add_sink<logstorm::sink::console>();
+  ///   logger.add_sink(std::make_shared<logstorm::sink::file>("myfile.log", logstorm::timestamp::types::SINCE_START));
   ///   // different ways to log:
   ///   logger.log("hello world");
   ///   logger("hello world");
@@ -36,8 +36,6 @@ private:
 public:
   template<typename T, class... Args, typename = std::enable_if_t<std::is_base_of<sink::base, T>::value>>
   unsigned int add_sink(Args&&... args);
-  [[deprecated("Prefer add_sink<type>(args) or add_sink(std::make_shared<type>(args))")]]
-  unsigned int add_sink(sink::base* newsink);
   unsigned int add_sink(std::shared_ptr<sink::base> newsink);
 
   std::shared_ptr<sink::base> get_sink(unsigned int sink_id);
@@ -48,18 +46,8 @@ public:
 
   void log(std::string const &log_entry);
 
-  [[deprecated("Using () is not required in combination with the stream operator.")]]
-  log_line_helper operator()() {
-    /// Generate log line helper as a temporary recipient to stream to
-    return log_line_helper(sinks);
-  }
   template <typename T> inline CONSTEXPR_IF_NO_CLANG void operator()(T entry);
-
   template <typename... Args> inline CONSTEXPR_IF_NO_CLANG void operator()(Args&&... entries);
-
-  /*
-  template<typename T> inline CONSTEXPR_IF_NO_CLANG manager &operator<<(T const &rhs);
-  */
   template<typename T> inline CONSTEXPR_IF_NO_CLANG log_line_helper operator<<(T const &rhs);
 };
 
@@ -83,15 +71,6 @@ inline CONSTEXPR_IF_NO_CLANG void manager::operator()(Args&&... entries) {
   unpack{0, (helper << entries, 0)...};
 }
 
-/*
-template<typename T>
-inline CONSTEXPR_IF_NO_CLANG manager &operator<<(T const &rhs) {
-  /// Convenience function just to generate a nice error if the << operator is called without () by mistake
-  // dirty hack: artificial static assert test that always fails but depends on instantiation (see http://stackoverflow.com/a/16101862/1678468)
-  static_assert(sizeof(T) != sizeof(T), "Use operator(), i.e. mylog() << \"my message\";");
-  return *this;
-}
-*/
 template<typename T>
 inline CONSTEXPR_IF_NO_CLANG log_line_helper manager::operator<<(T const &rhs) {
   /// Produce a log line helper and return it for further streaming
