@@ -12,7 +12,7 @@ namespace logstorm::sink {
 class circular_buffer : public base {
   /// A sink that stores strings in a circular buffer up to a fixed number of lines
 public:
-  unsigned int const size = 256;
+  unsigned int const size{256};
   boost::circular_buffer<std::string> data;
   #ifndef GUISTORM_SINGLETHREADED
     mutable std::shared_mutex data_mutex;
