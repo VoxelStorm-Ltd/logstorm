@@ -35,12 +35,12 @@ private:
 
 public:
   template<typename T, class... Args, typename = std::enable_if_t<std::is_base_of<sink::base, T>::value>>
-  unsigned int add_sink(Args&&... args);
-  unsigned int add_sink(std::shared_ptr<sink::base> newsink);
+  size_t add_sink(Args&&... args);
+  size_t add_sink(std::shared_ptr<sink::base> newsink);
 
-  std::shared_ptr<sink::base> get_sink(unsigned int sink_id);
+  std::shared_ptr<sink::base> get_sink(size_t sink_id);
 
-  void remove_sink(unsigned int sink_id);
+  void remove_sink(size_t sink_id);
 
   void clear_sinks();
 
@@ -49,10 +49,13 @@ public:
   template <typename T> inline CONSTEXPR_IF_NO_CLANG void operator()(T entry);
   template <typename... Args> inline CONSTEXPR_IF_NO_CLANG void operator()(Args&&... entries);
   template<typename T> inline CONSTEXPR_IF_NO_CLANG log_line_helper operator<<(T const &rhs);
+
+  template<typename T, class... Args, typename = std::enable_if_t<std::is_base_of<sink::base, T>::value>>
+  static logstorm::manager build_with_sink(Args&&... args);
 };
 
 template<typename T, class... Args, typename>
-unsigned int manager::add_sink(Args&&... args) {
+size_t manager::add_sink(Args&&... args) {
   return add_sink(std::make_shared<T>(args...));
 }
 
@@ -77,6 +80,14 @@ inline CONSTEXPR_IF_NO_CLANG log_line_helper manager::operator<<(T const &rhs) {
   log_line_helper helper(sinks);
   helper << rhs;
   return helper;
+}
+
+template<typename T, class... Args, typename>
+logstorm::manager manager::build_with_sink(Args&&... args) {
+  /// Build a manager class and initialise it with an initial sink
+  logstorm::manager result;
+  result.add_sink<T>(args...);
+  return result;
 }
 
 }
