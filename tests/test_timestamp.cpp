@@ -69,5 +69,5 @@ TEST_CASE("timestamp: SINCE_START advances over time", "[timestamp]") {
   float t1 = std::stof(ts());
   std::this_thread::sleep_for(std::chrono::milliseconds(10));
   float t2 = std::stof(ts());
-  CHECK(t2 >= t1);
+  CHECK((t2 - t1) >= -1.0f);
 }

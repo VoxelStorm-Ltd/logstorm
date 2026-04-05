@@ -1,6 +1,7 @@
 #include <catch2/catch_test_macros.hpp>
-#include <sstream>
 #include <memory>
+#include <sstream>
+#include <stdexcept>
 #include "logstorm/manager.h"
 #include "logstorm/sink/stream.h"
 #include "logstorm/sink/dummy.h"

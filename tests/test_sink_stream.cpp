@@ -52,6 +52,11 @@ TEST_CASE("stream sink: log_fragment() writes partial text without trailing newl
   s.log_fragment("part1");
   s.log_fragment("part2");
   std::string out = buf.str();
+#ifdef LOGSTORM_COMPOSE_FRAGMENTS_SEPARATELY
+  CHECK(out.empty());
+  s.log_fragment("\n");
+  out = buf.str();
+#endif
   CHECK(out.find("part1") != std::string::npos);
   CHECK(out.find("part2") != std::string::npos);
 }
