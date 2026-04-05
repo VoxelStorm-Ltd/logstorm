@@ -63,8 +63,7 @@ TEST_CASE("circular_buffer sink: log_fragment() buffers fragments until newline"
   // Once a newline fragment is received, the accumulated line is pushed to the buffer
   REQUIRE(cb.data.size() == 2);
   CHECK(cb.data[0] == "base");
-  CHECK(cb.data[1].find("frag") != std::string::npos);
-  CHECK(cb.data[1].find('\n') != std::string::npos);
+  CHECK(cb.data[1] == "frag\n");
 }
 #endif
 
