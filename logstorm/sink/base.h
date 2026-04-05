@@ -7,7 +7,6 @@ namespace logstorm::sink {
 
 class base {
   #ifdef LOGSTORM_COMPOSE_FRAGMENTS_SEPARATELY
-  protected:
     std::string line_in_progress;
   #endif // LOGSTORM_COMPOSE_FRAGMENTS_SEPARATELY
 
