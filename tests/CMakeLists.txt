@@ -49,22 +49,44 @@ if(Boost_FOUND)
   list(APPEND TEST_SOURCES test_sink_circular_buffer.cpp)
 endif()
 
-add_executable(logstorm_tests ${TEST_SOURCES} ${LOGSTORM_SOURCES})
-target_include_directories(logstorm_tests PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/..)
-target_link_libraries(logstorm_tests PRIVATE Catch2::Catch2WithMain)
-
-if(Boost_FOUND)
-  target_include_directories(logstorm_tests PRIVATE ${Boost_INCLUDE_DIRS})
-  target_compile_definitions(logstorm_tests PRIVATE LOGSTORM_HAS_BOOST)
-else()
-  message(STATUS "Boost not found - circular_buffer sink will not be built")
-endif()
-
 option(LOGSTORM_ENABLE_COVERAGE "Enable code coverage instrumentation" OFF)
-if(LOGSTORM_ENABLE_COVERAGE)
-  target_compile_options(logstorm_tests PRIVATE --coverage -O0 -g)
-  target_link_options(logstorm_tests PRIVATE --coverage)
-endif()
 
 include(Catch)
-catch_discover_tests(logstorm_tests)
+
+# Helper to create a logstorm test executable with a specific set of compile defines.
+# Usage: add_logstorm_test_variant(<target> [DEFINES def1 def2 ...])
+function(add_logstorm_test_variant target_name)
+  cmake_parse_arguments(ARG "" "" "DEFINES" ${ARGN})
+  add_executable(${target_name} ${TEST_SOURCES} ${LOGSTORM_SOURCES})
+  target_include_directories(${target_name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/..)
+  target_link_libraries(${target_name} PRIVATE Catch2::Catch2WithMain)
+  set(_defines ${ARG_DEFINES})
+  if(Boost_FOUND)
+    target_include_directories(${target_name} PRIVATE ${Boost_INCLUDE_DIRS})
+    list(APPEND _defines LOGSTORM_HAS_BOOST)
+  endif()
+  if(_defines)
+    target_compile_definitions(${target_name} PRIVATE ${_defines})
+  endif()
+  if(LOGSTORM_ENABLE_COVERAGE)
+    target_compile_options(${target_name} PRIVATE --coverage -O0 -g)
+    target_link_options(${target_name} PRIVATE --coverage)
+  endif()
+  catch_discover_tests(${target_name})
+endfunction()
+
+# Default build – no extra defines
+add_logstorm_test_variant(logstorm_tests)
+
+# Build with LOGSTORM_COMPOSE_FRAGMENTS_SEPARATELY: fragments are buffered until
+# a newline is received before being written to the sink as a complete line.
+add_logstorm_test_variant(logstorm_tests_compose_separately
+  DEFINES LOGSTORM_COMPOSE_FRAGMENTS_SEPARATELY)
+
+# Build with LOGSTORM_SINGLE_THREADED: mutex synchronisation is omitted.
+add_logstorm_test_variant(logstorm_tests_single_threaded
+  DEFINES LOGSTORM_SINGLE_THREADED)
+
+if(NOT Boost_FOUND)
+  message(STATUS "Boost not found - circular_buffer sink will not be built")
+endif()

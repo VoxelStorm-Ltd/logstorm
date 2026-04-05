@@ -28,7 +28,7 @@ TEST_CASE("circular_buffer sink: size field matches constructor argument", "[sin
 }
 
 TEST_CASE("circular_buffer sink: wraps around when full (circular behaviour)", "[sink][circular_buffer]") {
-  const unsigned int max = 4;
+  unsigned int constexpr max{4};
   circular_buffer cb{max};
   for(unsigned int i = 0; i < max + 2; ++i) {
     cb.log("msg" + std::to_string(i));
@@ -41,20 +41,31 @@ TEST_CASE("circular_buffer sink: wraps around when full (circular behaviour)", "
   CHECK(cb.data.front() == "msg2");
 }
 
+#ifndef LOGSTORM_COMPOSE_FRAGMENTS_SEPARATELY
 TEST_CASE("circular_buffer sink: log_fragment() appends to back entry", "[sink][circular_buffer]") {
   circular_buffer cb{8};
   cb.log("base");
   cb.log_fragment("frag");
-#ifdef LOGSTORM_COMPOSE_FRAGMENTS_SEPARATELY
-  REQUIRE(cb.data.size() == 2);
-  CHECK(cb.data.back() == "frag");
-#else
-  // In the default mode, log_fragment() appends to the existing back entry.
   REQUIRE(cb.data.size() == 1);
   CHECK(cb.data[0].find("base") != std::string::npos);
   CHECK(cb.data[0].find("frag") != std::string::npos);
-#endif
 }
+#else
+TEST_CASE("circular_buffer sink: log_fragment() buffers fragments until newline", "[sink][circular_buffer]") {
+  circular_buffer cb{8};
+  cb.log("base");
+  cb.log_fragment("frag");
+  // Fragments without a trailing newline are held in line_in_progress and not yet pushed to the buffer
+  REQUIRE(cb.data.size() == 1);
+  CHECK(cb.data[0] == "base");
+
+  cb.log_fragment("\n");
+  // Once a newline fragment is received, the accumulated line is pushed to the buffer
+  REQUIRE(cb.data.size() == 2);
+  CHECK(cb.data[0] == "base");
+  CHECK(cb.data[1] == "frag\n");
+}
+#endif
 
 TEST_CASE("circular_buffer sink: log() with timestamp prepends prefix", "[sink][circular_buffer]") {
   circular_buffer cb{8, timestamp::types::SINCE_START};
