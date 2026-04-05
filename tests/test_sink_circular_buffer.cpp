@@ -46,8 +46,11 @@ TEST_CASE("circular_buffer sink: log_fragment() appends to back entry", "[sink][
   cb.log("base");
   cb.log_fragment("frag");
 #ifdef LOGSTORM_COMPOSE_FRAGMENTS_SEPARATELY
-  REQUIRE(cb.data.size() == 2);
-  CHECK(cb.data.back() == "frag");
+  // In LOGSTORM_COMPOSE_FRAGMENTS_SEPARATELY mode, fragments without a trailing
+  // newline are accumulated in an internal buffer and not yet pushed to the
+  // circular buffer, so the buffer still contains only the original entry.
+  REQUIRE(cb.data.size() == 1);
+  CHECK(cb.data[0] == "base");
 #else
   // In the default mode, log_fragment() appends to the existing back entry.
   REQUIRE(cb.data.size() == 1);
