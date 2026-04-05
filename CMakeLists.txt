@@ -27,7 +27,7 @@ if(Boost_FOUND)
   list(APPEND LOGSTORM_SOURCES logstorm/sink/circular_buffer.cpp)
 endif()
 
-add_library(logstorm ${LOGSTORM_SOURCES})
+add_library(logstorm STATIC ${LOGSTORM_SOURCES})
 target_include_directories(logstorm PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 if(Boost_FOUND)

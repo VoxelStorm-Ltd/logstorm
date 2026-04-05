@@ -45,9 +45,15 @@ TEST_CASE("circular_buffer sink: log_fragment() appends to back entry", "[sink][
   circular_buffer cb{8};
   cb.log("base");
   cb.log_fragment("frag");
+#ifdef LOGSTORM_COMPOSE_FRAGMENTS_SEPARATELY
   REQUIRE(cb.data.size() == 2);
-  // log_fragment appends to the last entry in the buffer (non-compose mode)
   CHECK(cb.data.back() == "frag");
+#else
+  // In the default mode, log_fragment() appends to the existing back entry.
+  REQUIRE(cb.data.size() == 1);
+  CHECK(cb.data[0].find("base") != std::string::npos);
+  CHECK(cb.data[0].find("frag") != std::string::npos);
+#endif
 }
 
 TEST_CASE("circular_buffer sink: log() with timestamp prepends prefix", "[sink][circular_buffer]") {
