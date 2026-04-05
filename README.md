@@ -1,6 +1,9 @@
 # LogStorm
 C++ logging library by VoxelStorm.
 
+[![Tests](https://github.com/VoxelStorm-Ltd/logstorm/actions/workflows/tests.yml/badge.svg)](https://github.com/VoxelStorm-Ltd/logstorm/actions/workflows/tests.yml)
+[![codecov](https://codecov.io/gh/VoxelStorm-Ltd/logstorm/graph/badge.svg)](https://codecov.io/gh/VoxelStorm-Ltd/logstorm)
+
 A simple templated multi-sink logger with optional thread safety.  Designed to make it easy and compact to log text to console and file, and to easily be extensible to receive other sources.
 
 ## Usage
